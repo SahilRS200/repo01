@@ -1,7 +1,7 @@
 'use strict'
 var WebSocketClient = require('websocket').client;
 var client = new WebSocketClient();
-
+var author = "b212345678xz01"
 client.on('connectFailed', function(error) {
     console.log('Connect Error: ' + error.toString());
 });
@@ -27,7 +27,7 @@ connection.on('message', function(message) {
             setTimeout(sendNumber, 1000);
         }
     }
-    sendNumber();
+    sendWelcomePing();
 });
  
 client.connect('wss://node-db-api.run.aws-usw02-pr.ice.predix.io/wsinit');

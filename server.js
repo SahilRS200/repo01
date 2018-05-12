@@ -1,3 +1,5 @@
+
+
 var express = require('express');
 // var https = require('https');
 var http = require('http');
@@ -14,7 +16,7 @@ app.use(bodyParser.json());
 
 var routes = require('./publicroutes');
 routes(app);
-
+var devID = abcxyz123rt;
 
 
 var WebSocketClient = require('websocket').client;
@@ -38,15 +40,26 @@ connection.on('message', function(message) {
         }
     });
     
-    function sendNumber() {
+   const emitClick = function () {
         if (connection.connected) {
-            var number = Math.round(Math.random() * 0xFFFFFF);
-            connection.sendUTF(number.toString());
-            setTimeout(sendNumber, 1000);
+            var msg = {};
+	    msg.type = "IOT";
+            msg.author = devID
+            msg.payload = {timestamp : new Date().getTime()}
+            connection.sendUTF(JSON.stringify(msg));
+            //setTimeout(sendNumber, 1000);
         }
     }
     // sendNumber();
 });
- 
 client.connect('wss://node-db-api.run.aws-usw02-pr.ice.predix.io/wsinit');
+// GPIO 
+const Gpio = require('onoff').Gpio;
+const button = new Gpio(17, 'in', 'rising' , {debounceTimeout: 10});
+button.watch(function (err, value) {
+	console.log(err);
+  console.log(value);
+});
+ 
+
 
