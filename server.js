@@ -26,25 +26,56 @@ routes(app);
 var devID = "abcxyz123rt";
 var emitClick;
 var disableClick = false;
+var blinkerInterval= null;
+
 var blinkLEDSend = function() {
+clearInterval(blinkerInterval);
 	ledR.writeSync(1);
 	ledY.writeSync(0);
 	ledG.writeSync(0)
 }
 var blinkLEDAck = function() {
+clearInterval(blinkerInterval);
 	ledR.writeSync(0);
 	ledY.writeSync(1);
 	ledG.writeSync(0)
 }
+var blinkLEDAckf = function() {
+clearInterval(blinkerInterval);
+	ledR.writeSync(1);
+	ledY.writeSync(0);
+	ledG.writeSync(1);
+}
+
+var blinkLEDAprf = function() {
+clearInterval(blinkerInterval);
+	ledR.writeSync(0);
+	ledY.writeSync(1);
+	ledG.writeSync(1)
+}
+
 var blinkLEDApr = function() {
+clearInterval(blinkerInterval);
 	ledR.writeSync(0);
 	ledY.writeSync(0);
 	ledG.writeSync(1);
 }
+var blinkLEDAprt = function() {
+	ledR.writeSync(0);
+	ledY.writeSync(0);
+	ledG.writeSync(1);
+	blinkerInterval = setInterval(function(){
+		ledG.writeSync(ledG.readSync()^1)
+	},500);
+}
+
+
+
 var WebSocketClient = require('websocket').client;
 var client = new WebSocketClient();
 
 client.on('connectFailed', function(error) {
+clearInterval(blinkerInterval);
     console.log('Connect Error: ' + error.toString());
 	ledR.writeSync(1);
 	ledY.writeSync(1);
@@ -53,12 +84,14 @@ client.on('connectFailed', function(error) {
  
 client.on('connect', function(connection) {
 clearInterval(interval); console.log('reconnected'); disableClick = false ; blinkLEDApr();
+clearInterval(blinkerInterval);
     console.log('WebSocket Client Connected');
     connection.on('error', function(error) {
         console.log("Connection Error: " + error.toString());
     });
 
 connection.on('close', function() {
+clearInterval(blinkerInterval);
         console.log('echo-protocol Connection Closed');
 	ledR.writeSync(1);
 	ledY.writeSync(0);
@@ -79,12 +112,15 @@ connection.on('message', function(message) {
 		var messagedata = JSON.parse(message.utf8Data);
 		if(messagedata.type === 'ACKNOWLEDGED') {disableClick=true ; blinkLEDAck() }
 		else if(messagedata.type === 'APPROVED') {disableClick=false ; blinkLEDApr() }
-		
+		else if(messagedata.type === 'ACKNOWLEDGE-FAIL') {disableClick=false ; blinkLEDAckf() }
+		else if(messagedata.type === 'APPROVED-FAIL') {disableClick=false ; blinkLEDAprf() }
+		else if(messagedata.type === 'APPROVED-TIMEOUT') {disableClick=false ; blinkLEDAprt() }	
 		
         }
     });
     
 emitClick = function () {
+clearInterval(blinkerInterval);
         if (connection.connected) {
             var msg = {};
 	    msg.type = "IOT";
