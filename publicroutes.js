@@ -1,3 +1,4 @@
+'use strict'
 module.exports = function (app) {
     app.route('/click')
     .get(function(req,res) {
