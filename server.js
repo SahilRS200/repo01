@@ -76,10 +76,18 @@ var client = new WebSocketClient();
 
 client.on('connectFailed', function(error) {
 clearInterval(blinkerInterval);
+clearInterval(interval);
     console.log('Connect Error: ' + error.toString());
 	ledR.writeSync(1);
 	ledY.writeSync(1);
 	ledG.writeSync(1);
+interval = setInterval(function(){
+		console.log('reconnect');
+	ledR.writeSync(1);
+	ledY.writeSync(1);
+	ledG.writeSync(1);
+		client.connect('wss://node-db-api.run.aws-usw02-pr.ice.predix.io/wsinit');
+		} , 10000)
 });
  
 client.on('connect', function(connection) {
