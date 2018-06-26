@@ -12,17 +12,17 @@ var express = require('express');
 var http = require('http');
 var bodyParser = require('body-parser');
 
-app = express();
+// app = express();
 //var appSecure = https.createServer(ssl.getSSLOptions());
 port = process.env.PORT || 3003;
 // var app = http.createServer();
 var server = http.createServer(app).listen(port);
 
-app.use(bodyParser.urlencoded({extended : true}));
-app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({extended : true}));
+// app.use(bodyParser.json());
 
-var routes = require('./publicroutes');
-routes(app);
+// var routes = require('./publicroutes');
+// routes(app);
 var devID = "abcxyz123rt";
 var emitClick;
 var disableClick = false;
