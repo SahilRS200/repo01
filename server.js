@@ -3,8 +3,8 @@ var ledR = new Gpio(23, 'out');
 var ledY = new Gpio(27, 'out');
 var ledG = new Gpio(22, 'out');
 var interval= null;
-ledR.writeSync(0);
-ledY.writeSync(0);
+ledR.writeSync(1);
+ledY.writeSync(1);
 ledG.writeSync(1);
 var interval = null;
 var express = require('express');
@@ -143,6 +143,7 @@ clearInterval(blinkerInterval);
     }
     // sendNumber();
 });
+
 client.connect('wss://node-db-api.run.aws-usw02-pr.ice.predix.io/wsinit');
 // GPIO 
 
