@@ -153,6 +153,49 @@ button.watch(function (err, value) {
   console.log(value);
 if(value === 1 && !disableClick){emitClick()}
 });
- 
+
+// DEATH
+
+
+
+var gracefulDeath = function(s,e) {
+	if(e) {console.log(e);}
+	ledR.writeSync(0);
+	ledY.writeSync(0);
+	ledG.writeSync(0);
+	// setTimeout(function(){
+		ledR.writeSync(ledR.readSync()^1);
+		ledY.writeSync(ledY.readSync()^1);
+		ledG.writeSync(ledG.readSync()^1);
+	// } , 500);
+sleep.msleep(500);
+	// setTimeout(function(){
+		ledR.writeSync(ledR.readSync()^1);
+		ledY.writeSync(ledY.readSync()^1);
+		ledG.writeSync(ledG.readSync()^1);
+	// } , 1000);
+sleep.msleep(500);
+		ledR.writeSync(ledR.readSync()^1);
+		ledY.writeSync(ledY.readSync()^1);
+		ledG.writeSync(ledG.readSync()^1);
+sleep.msleep(500);
+	// setTimeout(function(){
+		ledR.writeSync(0);
+		ledY.writeSync(0);
+		ledG.writeSync(0);
+		
+	// } , 1500);
+sleep.msleep(500);
+process.exit(0);
+
+};
+var ON_DEATH = require('death')({uncaughtException : true});
+var sleep = require('sleep');
+// ON_DEATH(gracefulDeath);
+process.on('SIGTERM' , gracefulDeath);
+process.on('SIGINT' , gracefulDeath);
+process.on('SIGHUP' , gracefulDeath);
+process.on('SIGQUIT' , gracefulDeath);
+process.on('SIGABRT' , gracefulDeath);
 
 

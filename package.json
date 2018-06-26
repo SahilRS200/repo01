@@ -10,9 +10,11 @@
   "license": "MIT",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "death": "^1.1.0",
     "express": "^4.16.3",
     "http": "0.0.0",
     "onoff": "^3.1.0",
-    "websocket": "^1.0.26"
+    "websocket": "^1.0.26",
+    "sleep" : "^5.1.1"
   }
 }
